@@ -214,6 +214,54 @@ def set_custom_style():
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        /* ===== SIDEBAR THEME MATCH ===== */
+        section[data-testid="stSidebar"] {
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlgrH8jilnVJPKdM25-NvT-3lxzJq6Wpu6Gv4lcHaLI9re9hO51vmXvZ8&s=10') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-attachment: fixed !important;
+        }
+        section[data-testid="stSidebar"] > div:first-child {
+            background-color: rgba(255, 255, 255, 0.92) !important;
+            border-radius: 15px !important;
+            margin: 12px !important;
+            padding: 1.2rem !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+        section[data-testid="stSidebar"] h1,
+        section[data-testid="stSidebar"] h2,
+        section[data-testid="stSidebar"] h3,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] p {
+            color: #2c3e50 !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stDataFrame"] {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        section[data-testid="stSidebar"] .stDownloadButton button {
+            background-color: #3498db !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+        }
+        section[data-testid="stSidebar"] .stDownloadButton button:hover {
+            background-color: #2980b9 !important;
+        }
+        section[data-testid="stSidebar"] [data-testid="stAlert"] {
+            background-color: rgba(232, 244, 248, 0.95) !important;
+            border-radius: 10px !important;
+            border-left: 5px solid #3498db !important;
+        }
+        section[data-testid="stSidebar"] hr {
+            border-color: rgba(0, 0, 0, 0.15) !important;
+        }
+        /* ===== END SIDEBAR THEME MATCH ===== */
+
         .main-header {
             color: #2c3e50;
             text-align: center;
