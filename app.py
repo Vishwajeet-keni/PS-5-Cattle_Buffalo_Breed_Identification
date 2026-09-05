@@ -16,7 +16,7 @@ import json
 from transformers import BlipProcessor, BlipForConditionalGeneration
 import plotly.graph_objects as go
 # Set page config first
-st.set_page_config(page_title="🐄 Cattle Breed Identifier", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="🐄 Cattle Breed Identifier", layout="centered", initial_sidebar_state="expanded")
 # ============ TRANSLATIONS ============
 def get_translation(key, language="en"):
     translations = {
@@ -190,17 +190,56 @@ def get_translation(key, language="en"):
         }
     }
     return translations.get(language, translations["en"]).get(key, key)
+
 def language_selector():
-    st.sidebar.markdown("---")
-    st.sidebar.header("🌐 Language")
-    language = st.sidebar.radio("Select Language", ["English", "Hindi", "Telugu"], index=0, label_visibility="collapsed")
-    lang_map = {"English": "en", "Hindi": "hi", "Telugu": "te"}
+    with st.sidebar:
+
+        st.markdown(
+            """
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">🐄</div>
+
+                <div class="sidebar-brand-title">
+                    LIVESTOCK IQ
+                </div>
+
+                <div class="sidebar-brand-subtitle">
+                    Indian Bovine Intelligence
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            '<div class="sidebar-section-title">Language</div>',
+            unsafe_allow_html=True
+        )
+
+        language = st.radio(
+            "Select Language",
+            ["English", "Hindi", "Telugu"],
+            index=0,
+            label_visibility="collapsed"
+        )
+
+    lang_map = {
+        "English": "en",
+        "Hindi": "hi",
+        "Telugu": "te"
+    }
+
     return lang_map[language]
 # ============ STYLING ============
 def set_custom_style():
     st.markdown(
         """
         <style>
+
+        /* =========================================================
+           MAIN APPLICATION BACKGROUND
+           ========================================================= */
+
         .stApp {
             background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlgrH8jilnVJPKdM25-NvT-3lxzJq6Wpu6Gv4lcHaLI9re9hO51vmXvZ8&s=10');
             background-size: cover;
@@ -208,143 +247,478 @@ def set_custom_style():
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
         .main .block-container {
             background-color: rgba(255, 255, 255, 0.92);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.10);
         }
 
-        /* ===== SIDEBAR THEME MATCH ===== */
+
+        /* =========================================================
+           SIDEBAR - MATCH MAIN PAGE
+           ========================================================= */
+
         section[data-testid="stSidebar"] {
             background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlgrH8jilnVJPKdM25-NvT-3lxzJq6Wpu6Gv4lcHaLI9re9hO51vmXvZ8&s=10') !important;
             background-size: cover !important;
             background-position: center !important;
+            background-repeat: no-repeat !important;
             background-attachment: fixed !important;
         }
+
+        /* Sidebar content panel */
         section[data-testid="stSidebar"] > div:first-child {
-            background-color: rgba(255, 255, 255, 0.92) !important;
-            border-radius: 15px !important;
-            margin: 12px !important;
-            padding: 1.2rem !important;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+            background-color: rgba(255, 255, 255, 0.94) !important;
+            padding: 1.1rem 1rem !important;
         }
+
+        section[data-testid="stSidebar"] .block-container {
+            padding-top: 0.8rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+
+
+        /* =========================================================
+           SIDEBAR BRAND
+           ========================================================= */
+
+        .sidebar-brand {
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.88);
+
+            border-radius: 15px;
+
+            padding: 16px 10px 15px 10px;
+
+            margin-bottom: 15px;
+
+            border: 1px solid rgba(52, 152, 219, 0.15);
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+        }
+
+        .sidebar-brand-icon {
+            font-size: 2.3rem;
+
+            line-height: 1;
+
+            margin-bottom: 7px;
+        }
+
+        .sidebar-brand-title {
+            color: #2c3e50;
+
+            font-size: 1.35rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.8px;
+
+            margin: 0;
+        }
+
+        .sidebar-brand-subtitle {
+            color: #7f8c8d;
+
+            font-size: 0.76rem;
+
+            margin-top: 5px;
+
+            letter-spacing: 0.2px;
+        }
+
+
+        /* =========================================================
+           SECTION TITLES
+           ========================================================= */
+
+        .sidebar-section-title {
+            color: #2c3e50;
+
+            font-size: 0.78rem;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.8px;
+
+            margin: 16px 0 8px 2px;
+        }
+
+
+        /* =========================================================
+           LANGUAGE SELECTOR
+           ========================================================= */
+
+        section[data-testid="stSidebar"] [data-testid="stRadio"] {
+            background: rgba(255, 255, 255, 0.88);
+
+            border-radius: 12px;
+
+            padding: 9px 11px;
+
+            border: 1px solid rgba(52, 152, 219, 0.14);
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stRadio"] label {
+            color: #34495e !important;
+
+            font-weight: 500 !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+            color: #3498db !important;
+        }
+
+
+        /* =========================================================
+           HISTORY CARD
+           ========================================================= */
+
+        .sidebar-history-card {
+            background: rgba(255, 255, 255, 0.90);
+
+            border-radius: 14px;
+
+            padding: 10px;
+
+            border-left: 4px solid #3498db;
+
+            margin-bottom: 10px;
+
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* =========================================================
+           DATAFRAME
+           ========================================================= */
+
+        section[data-testid="stSidebar"] [data-testid="stDataFrame"] {
+            border-radius: 10px !important;
+
+            overflow: hidden !important;
+
+            border: 1px solid rgba(52, 152, 219, 0.12) !important;
+
+            box-shadow: none !important;
+        }
+
+
+        /* =========================================================
+           DOWNLOAD BUTTON
+           ========================================================= */
+
+        section[data-testid="stSidebar"] .stDownloadButton button {
+            width: 100%;
+
+            background: #3498db !important;
+
+            color: white !important;
+
+            border: none !important;
+
+            border-radius: 10px !important;
+
+            padding: 0.55rem 1rem !important;
+
+            font-weight: 700 !important;
+
+            transition: all 0.2s ease !important;
+        }
+
+        section[data-testid="stSidebar"] .stDownloadButton button:hover {
+            background: #2980b9 !important;
+
+            transform: translateY(-1px);
+
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.25);
+        }
+
+
+        /* =========================================================
+           ABOUT CARD
+           ========================================================= */
+
+        .sidebar-about {
+            background: rgba(255, 255, 255, 0.90);
+
+            border-radius: 14px;
+
+            padding: 14px;
+
+            border-left: 4px solid #27ae60;
+
+            margin-top: 8px;
+
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.06);
+        }
+
+        .sidebar-about-title {
+            color: #2c3e50;
+
+            font-weight: 800;
+
+            font-size: 0.92rem;
+
+            margin-bottom: 6px;
+        }
+
+        .sidebar-about-text {
+            color: #667777;
+
+            font-size: 0.79rem;
+
+            line-height: 1.5;
+
+            margin: 0;
+        }
+
+
+        /* =========================================================
+           MODEL STATUS
+           ========================================================= */
+
+        .sidebar-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background: rgba(39, 174, 96, 0.08);
+
+            border: 1px solid rgba(39, 174, 96, 0.18);
+
+            border-radius: 10px;
+
+            padding: 9px 11px;
+
+            margin-top: 11px;
+        }
+
+        .sidebar-status-dot {
+            width: 8px;
+
+            height: 8px;
+
+            min-width: 8px;
+
+            background: #27ae60;
+
+            border-radius: 50%;
+
+            display: inline-block;
+        }
+
+        .sidebar-status-text {
+            color: #2c3e50;
+
+            font-size: 0.78rem;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+           SIDEBAR DIVIDERS
+           ========================================================= */
+
+        section[data-testid="stSidebar"] hr {
+            border: none !important;
+
+            border-top: 1px solid rgba(52, 152, 219, 0.15) !important;
+
+            margin: 13px 0 !important;
+        }
+
+
+        /* =========================================================
+           SIDEBAR TEXT
+           ========================================================= */
+
         section[data-testid="stSidebar"] h1,
         section[data-testid="stSidebar"] h2,
         section[data-testid="stSidebar"] h3,
-        section[data-testid="stSidebar"] label,
-        section[data-testid="stSidebar"] p {
-            color: #2c3e50 !important;
+        section[data-testid="stSidebar"] p,
+        section[data-testid="stSidebar"] label {
+            color: #2c3e50;
         }
-        section[data-testid="stSidebar"] [data-testid="stDataFrame"] {
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            border-radius: 10px !important;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-        }
-        section[data-testid="stSidebar"] .stDownloadButton button {
-            background-color: #3498db !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-        }
-        section[data-testid="stSidebar"] .stDownloadButton button:hover {
-            background-color: #2980b9 !important;
-        }
-        section[data-testid="stSidebar"] [data-testid="stAlert"] {
-            background-color: rgba(232, 244, 248, 0.95) !important;
-            border-radius: 10px !important;
-            border-left: 5px solid #3498db !important;
-        }
-        section[data-testid="stSidebar"] hr {
-            border-color: rgba(0, 0, 0, 0.15) !important;
-        }
-        /* ===== END SIDEBAR THEME MATCH ===== */
+
+
+        /* =========================================================
+           MAIN PAGE HEADER
+           ========================================================= */
 
         .main-header {
             color: #2c3e50;
+
             text-align: center;
+
             font-size: 2.8rem;
+
             font-weight: bold;
+
             margin-bottom: 1rem;
         }
+
         .sub-header {
             color: #34495e;
+
             text-align: center;
+
             font-size: 1.3rem;
+
             margin-bottom: 2rem;
         }
+
+
+        /* =========================================================
+           PREDICTION BOX
+           ========================================================= */
+
         .prediction-box {
             background-color: rgba(255, 255, 255, 0.95);
+
             padding: 20px;
+
             border-radius: 12px;
+
             border-left: 5px solid #3498db;
+
             margin: 15px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+
+        /* =========================================================
+           BREED INFORMATION
+           ========================================================= */
+
         .breed-info {
             background-color: rgba(248, 249, 250, 0.95);
+
             padding: 20px;
+
             border-radius: 10px;
+
             border-left: 5px solid #27ae60;
+
             margin: 15px 0;
         }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
         .footer {
             text-align: center;
+
             padding: 10px;
+
             background-color: rgba(255, 255, 255, 0.8);
+
             border-radius: 10px;
+
             margin-top: 20px;
         }
+
+
+        /* =========================================================
+           CATTLE CARD
+           ========================================================= */
+
         .cattle-card {
             background-color: white;
+
             border-radius: 10px;
+
             padding: 15px;
+
             margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .cattle-name {
             font-weight: bold;
+
             font-size: 18px;
+
             color: #2c3e50;
         }
+
         .cattle-price {
             color: #27ae60;
+
             font-weight: bold;
+
             font-size: 16px;
         }
+
         .seller-info {
             color: #7f8c8d;
+
             font-size: 14px;
         }
+
+
+        /* =========================================================
+           METRIC CARDS
+           ========================================================= */
+
         .metric-card {
             background-color: rgba(255, 255, 255, 0.97);
+
             border-radius: 14px;
+
             padding: 18px 8px 14px 8px;
+
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+
             transition: transform 0.15s ease;
         }
+
         .metric-card:hover {
             transform: translateY(-3px);
         }
+
         .metric-icon {
             font-size: 1.6rem;
+
             margin-bottom: 2px;
         }
+
         .metric-value {
             font-size: 1.9rem;
+
             font-weight: 800;
+
             margin: 2px 0;
         }
+
         .metric-label {
             font-size: 0.8rem;
+
             color: #7f8c8d;
+
             text-transform: uppercase;
+
             letter-spacing: 0.6px;
+
             font-weight: 600;
         }
+
         </style>
         """,
         unsafe_allow_html=True
@@ -813,23 +1187,190 @@ if 'current_page' not in st.session_state:
 def navigate_to(page):
     st.session_state.current_page = page
 # ============ SIDEBAR ============
+
 with st.sidebar:
-    st.header("📊 Classification History")
+
+    # =========================================================
+    # CLASSIFICATION HISTORY
+    # =========================================================
+
+    st.markdown(
+        '<div class="sidebar-section-title">Classification History</div>',
+        unsafe_allow_html=True
+    )
+
     csv_file = "cattle_classification_data.csv"
+
     if os.path.isfile(csv_file):
+
         try:
             df = pd.read_csv(csv_file)
+
             if not df.empty:
-                st.dataframe(df.tail(5), use_container_width=True)
+
+                st.markdown(
+                    '<div class="sidebar-history-card">',
+                    unsafe_allow_html=True
+                )
+
+                history_df = df.tail(5).copy()
+
+                st.dataframe(
+                    history_df,
+                    use_container_width=True,
+                    hide_index=True
+                )
+
+                st.markdown(
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+
                 with open(csv_file, "rb") as file:
-                    st.download_button("📥 Download CSV", data=file, file_name="cattle_classification_data.csv", mime="text/csv")
-        except:
-            st.info("No history available")
+
+                    st.download_button(
+                        "Download History",
+                        data=file,
+                        file_name="cattle_classification_data.csv",
+                        mime="text/csv",
+                        use_container_width=True
+                    )
+
+            else:
+
+                st.markdown(
+                    """
+                    <div class="sidebar-history-card">
+
+                        <div style="
+                            color:#7f8c8d;
+                            text-align:center;
+                            font-size:0.82rem;
+                            padding:8px;
+                        ">
+                            No classifications yet.
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        except Exception:
+
+            st.markdown(
+                """
+                <div class="sidebar-history-card">
+
+                    <div style="
+                        color:#7f8c8d;
+                        text-align:center;
+                        font-size:0.82rem;
+                        padding:8px;
+                    ">
+                        No history available.
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
     else:
-        st.info("No history available")
-    
+
+        st.markdown(
+            """
+            <div class="sidebar-history-card">
+
+                <div style="
+                    color:#7f8c8d;
+                    text-align:center;
+                    font-size:0.82rem;
+                    padding:8px;
+                ">
+                    No classifications yet.
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+    # =========================================================
+    # DIVIDER
+    # =========================================================
+
     st.markdown("---")
-    st.info("🐄 Indian Cattle Breed Identifier\n\nIdentifies over 40 Indian cattle breeds using AI.")
+
+
+    # =========================================================
+    # ABOUT
+    # =========================================================
+
+    st.markdown(
+        '<div class="sidebar-section-title">About</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        """
+        <div class="sidebar-about">
+
+            <div class="sidebar-about-title">
+                🐄 Indian Cattle Breed Identifier
+            </div>
+
+            <p class="sidebar-about-text">
+                AI-powered identification of Indian cattle
+                and buffalo breeds using deep learning.
+            </p>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    # =========================================================
+    # MODEL STATUS
+    # =========================================================
+
+if model is not None:
+    st.markdown(
+        """
+        <div class="sidebar-status">
+
+            <span class="sidebar-status-dot"></span>
+
+            <span class="sidebar-status-text">
+                AI Model Ready
+            </span>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+else:
+    st.markdown(
+        """
+        <div class="sidebar-status"
+             style="
+                background: rgba(231, 76, 60, 0.08);
+                border-color: rgba(231, 76, 60, 0.20);
+             ">
+
+            <span class="sidebar-status-dot"
+                  style="background:#e74c3c;"></span>
+
+            <span class="sidebar-status-text">
+                Demo Mode
+            </span>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 # ============ MAIN APP ============
 if st.session_state.current_page == "main":
     st.markdown(f'<h1 class="main-header">{get_translation("title", language)}</h1>', unsafe_allow_html=True)
